@@ -2,14 +2,12 @@ $(document).ready(function () {
   console.log("doc is ready");
 
   $("#btnGetFacts").click(function () {
-    // Clear previous output
+
     $("#coolNameFactsOutput").html('');
     
-    // Get user input
     let userName = $("#userName").val();
     console.log("user name = ", userName);
     
-    // Generate and display cool name facts
     $("#coolNameFactsOutput").html(generateCoolNameFacts(userName));
   });
 });
@@ -21,7 +19,11 @@ function generateCoolNameFacts(userName) {
   coolFacts += nameStart(userName) + " <br> ";
   coolFacts += nameEnd(userName) + " <br> ";
   coolFacts += reverseName(userName) + " <br> ";
-  coolFacts += getSpiritAnimal(userName);
+  coolFacts += getSpiritAnimal(userName) + " <br> ";
+  coolFacts += removeDuplicates(userName) + " <br> ";
+  coolFacts += countOccurrences(userName) + " <br> ";
+  coolFacts += countUniqueLetters(userName);
+
 
   console.log("Initialized the 'coolFacts' variable: " + coolFacts);
 
@@ -42,7 +44,6 @@ function nameEnd(name) {
 }
 
 function reverseName(name) {
-  // Split the name into an array of characters, reverse it, and join back into a string
   return "Your name spelled backward is " + name.split('').reverse().join('');
 }
 
@@ -115,4 +116,43 @@ function getSpiritAnimal(x) {
       break;
   }
   return spiritAnimal;
+}
+
+function removeDuplicates(name) {
+  const uniqueChars = name.toLowerCase().split('').filter((char, index, array) => array.indexOf(char) === index).join('');
+  const result = uniqueChars.charAt(0).toUpperCase() + uniqueChars.slice(1);
+  return `Name without duplicates: ${result}`;
+}
+
+function countOccurrences(name) {
+  const charCounts = {};
+  const nameLowerCase = name.toLowerCase();
+
+  for (let char of nameLowerCase) {
+    if (/[a-z]/.test(char)) {
+      charCounts[char] = (charCounts[char] || 0) + 1;
+    }
+  }
+
+  const repeatingChars = Object.entries(charCounts)
+    .filter(([char, count]) => count > 1)
+    .map(([char, count]) => `${char}: ${count}`)
+    .join(', ');
+
+  return `Repeating letters: ${repeatingChars}`;
+}
+
+function countUniqueLetters(name) {
+  const letterFrequency = {};
+  const lowercaseName = name.toLowerCase();
+
+  lowercaseName.split('').forEach(char => {
+    if (/[a-z]/.test(char)) {
+      letterFrequency[char] = (letterFrequency[char] || 0) + 1;
+    }
+  });
+
+  const result = Object.keys(letterFrequency).map(letter => `${letter}: ${letterFrequency[letter]}`).join(', ');
+
+  return `Letter frequencies in the name: ${result}`;
 }
